@@ -1,4 +1,5 @@
-﻿using Codecool.MarsExploration.MapGenerator.Calculators.Model;
+﻿using System;
+using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
 namespace Codecool.MarsExploration.MapExplorer;
 
