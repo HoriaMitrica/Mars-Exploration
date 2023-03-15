@@ -84,6 +84,7 @@ public class ExplorationSimulationSteps
 
     public ExplorationOutcome Analysis(int[] foundResources, int[] minimumResourcesNeeded, int currentStep, int totalNumberSteps)
     {
+        int halfTotalSteps = totalNumberSteps / 2;
         if (foundResources[0] >= minimumResourcesNeeded[0] && foundResources[1] >= minimumResourcesNeeded[1])
         {
             return ExplorationOutcome.Success;
