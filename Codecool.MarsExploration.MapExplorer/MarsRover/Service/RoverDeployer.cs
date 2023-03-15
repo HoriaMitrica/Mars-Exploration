@@ -20,7 +20,7 @@ public class RoverDeployer: IRoverDeployer
     public Rover DeployRover(Simulation simulation)
     {
         var coordinateRover = new Coordinate(0,0);
-        var reach = 2;
+        var reach = 3;
         var ID = "";
         var map = _mapLoader.Load(simulation.MapFilePath).Representation;
         var mapSize = map.GetLength(0);

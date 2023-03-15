@@ -1,5 +1,6 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
 using Codecool.MarsExploration.MapExplorer.Configuration.Service;
+using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MapLoader;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
@@ -17,19 +18,23 @@ public class ExplorationSimulator
 
     private readonly IMapLoader _mapLoader;
 
-    private readonly IConfigurationValidator _configurationValidator;
     private readonly ExplorationSimulationSteps _explorationSimulationSteps;
-    public ExplorationSimulator(Simulation simulation)
+
+    private readonly ILogger _logger;
+    public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader)
     {
         _simulation = simulation;
+        _rover = roverDeployer;
+        _mapLoader = mapLoader;
         _simulationContext = CreateContext();
         _explorationSimulationSteps = new ExplorationSimulationSteps(_simulationContext);
+        _logger = logger;
     }
 
     private SimulationContext CreateContext()
     {
         var numberSteps = _simulation.numberOfSteps;
-        Rover rover = _rover.DeployRover(_simulation);
+        var rover = _rover.DeployRover(_simulation);
         var shipCoordinate = _simulation.landingCoordinate;
         var map = _mapLoader.Load(_simulation.MapFilePath);
         var resources = _simulation.elementsToScan;
@@ -37,21 +42,63 @@ public class ExplorationSimulator
         return new SimulationContext(numberSteps,numberStepsTimeOut,rover,shipCoordinate,map,resources);
     }
 
-    public ExplorationOutcome? Simulate()
+    public ExplorationOutcome? Simulate(int minimumMineralsNeeded, int minimumWaterNeeded)
     {
-        int res = 0;
+        int[] totalResources = new int[2]{0,0};
+        int[] minimumResourcesNeeded = new int[2]{minimumMineralsNeeded,minimumWaterNeeded};
         Coordinate RoverCurrentCoordinate = _simulationContext.Rover.currentPosition;
+        List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
-        while step<maxstep
+        int currentStep = _simulation.currentStep; 
+        while (currentStep < _simulationContext.totalNumberSteps)
         {
-            RoverCurrentCoordinate = _explorationSimulationSteps.MoveRover(RoverCurrentCoordinate);
-            res+=scan
-                    log
-                        step++
-                        
+            RoverCurrentCoordinate = _explorationSimulationSteps.MoveRover(RoverCurrentCoordinate,coordinatesUsed);
+            
+            var currentResources = _explorationSimulationSteps.ScanArea(RoverCurrentCoordinate, foundResources);
+            totalResources[0] += currentResources[0];
+            totalResources[1] += currentResources[1];
+            
+            _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,"");
+            currentStep++;
         }
-        analysis(res)
-        return null; 
+        
+        var outcome = _explorationSimulationSteps.Analysis(totalResources, minimumResourcesNeeded,currentStep, _simulationContext.totalNumberSteps);
+        _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+
+
+        string[,] mapp = new string[23, 23];
+        for (var i = 0; i < mapp.GetLength(0); i++)
+        {
+            for (var j = 0; j < mapp.GetLength(1); j++)
+            {
+                var currentCoordinate = new Coordinate(i, j);
+                if (coordinatesUsed.Contains(currentCoordinate))
+                {
+                    mapp[i, j] = "1";
+                }
+                else
+                {
+                    mapp[i, j] = _simulationContext.Map.Representation[i, j];
+                }
+            }
+        }
+        
+        for (var i = 0; i < mapp.GetLength(0); i++)
+        {
+            Console.Write($"{i}| ");
+            for (var j = 0; j < mapp.GetLength(1); j++)
+            {
+                Console.Write(mapp[i,j]);
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine(totalResources[0]);
+        Console.WriteLine(totalResources[1]);
+        return outcome; 
     }
+    
+    
     
 }
