@@ -49,7 +49,7 @@ public class ExplorationSimulationSteps
                 _coordinateCalculator.GetAdjacentCoordinates(roverCoordinate, _simulationContext.Map.Dimension, i).ToList();
             foreach (var coordinate in adjacentCoordinates)
             {
-                if (foundResources.Contains(coordinate))
+                if (!foundResources.Contains(coordinate))
                 {
                     if (_simulationContext.Map.Representation[coordinate.X, coordinate.Y] ==
                         _simulationContext.resources.ToList()[0])

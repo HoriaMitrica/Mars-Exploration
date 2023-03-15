@@ -21,20 +21,20 @@ public class ExplorationSimulator
     private readonly ExplorationSimulationSteps _explorationSimulationSteps;
 
     private readonly ILogger _logger;
-    public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader)
+    public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader, int reach)
     {
         _simulation = simulation;
         _rover = roverDeployer;
         _mapLoader = mapLoader;
-        _simulationContext = CreateContext();
+        _simulationContext = CreateContext(reach);
         _explorationSimulationSteps = new ExplorationSimulationSteps(_simulationContext);
         _logger = logger;
     }
 
-    private SimulationContext CreateContext()
+    private SimulationContext CreateContext(int reach)
     {
         var numberSteps = _simulation.numberOfSteps;
-        var rover = _rover.DeployRover(_simulation);
+        var rover = _rover.DeployRover(_simulation,reach);
         var shipCoordinate = _simulation.landingCoordinate;
         var map = _mapLoader.Load(_simulation.MapFilePath);
         var resources = _simulation.elementsToScan;

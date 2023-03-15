@@ -22,13 +22,14 @@ class Program
         string mapFile = $@"{WorkDir}\Resources\exploration-0.map";
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%", "*" };
-        int numberSteps = 100;
+        int reach = 2;
+        int numberSteps = 1000;
         int minimumMineralsNeeded = 5;
         int minimumWaterNeeded = 5;
         _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0);
         if (_configurationValidator.isValid(_simulation))
         {
-            ExplorationSimulator explorationSimulator = new ExplorationSimulator(_simulation,_logger,_roverDeployer,_mapLoader);
+            ExplorationSimulator explorationSimulator = new ExplorationSimulator(_simulation,_logger,_roverDeployer,_mapLoader, reach);
             explorationSimulator.Simulate(minimumMineralsNeeded, minimumWaterNeeded);    
         }
         else
