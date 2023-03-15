@@ -18,24 +18,16 @@ public class ExplorationSimulationSteps
 
     public Coordinate MoveRover(Coordinate roverCoordinate, List<Coordinate> coordinatesUsed)
     {
-        List<Coordinate> freeCoordinates = new List<Coordinate>();
-        var adjacentCoordinates = _coordinateCalculator.GetAdjacentCoordinates(roverCoordinate, _simulationContext.Map.Dimension,1).ToList();
-        foreach (var coordinate in adjacentCoordinates)
-        {
-            if (_simulationContext.Map.Representation[coordinate.X, coordinate.Y] == " " && !coordinatesUsed.Contains(coordinate))
-            {
-                freeCoordinates.Add(coordinate);
-                
-            }
-        }
+        var adjacentCoordinates = _coordinateCalculator.GetAdjacentCoordinates(roverCoordinate, _simulationContext.Map.Dimension,1).Where(coordinate => _simulationContext.Map.Representation[coordinate.X, coordinate.Y] == " ").ToList();
+        var freeCoordinates = adjacentCoordinates.Where(coordinate => !coordinatesUsed.Contains(coordinate)).ToList();
 
-        if (freeCoordinates.Count >0)
+        if (freeCoordinates.Count() > 0)
         {
-            var randomCoordinate = freeCoordinates[random.Next(0, freeCoordinates.Count - 1)];
+            var randomCoordinate = freeCoordinates[random.Next(0, freeCoordinates.Count)];
             coordinatesUsed.Add(randomCoordinate);
             return randomCoordinate;
         }
-        return coordinatesUsed[coordinatesUsed.Count-1];
+        return adjacentCoordinates[random.Next(0, adjacentCoordinates.Count)];
     }
 
     public int[] ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources)

@@ -66,7 +66,7 @@ public class ExplorationSimulator
         _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
 
 
-        string[,] mapp = new string[23, 23];
+        string[,] mapp = new string[32, 32];
         for (var i = 0; i < mapp.GetLength(0); i++)
         {
             for (var j = 0; j < mapp.GetLength(1); j++)
@@ -85,9 +85,17 @@ public class ExplorationSimulator
         
         for (var i = 0; i < mapp.GetLength(0); i++)
         {
-            Console.Write($"{i}| ");
+            Console.Write($"{i%10}| ");
             for (var j = 0; j < mapp.GetLength(1); j++)
             {
+                if (mapp[i, j] == "%" || mapp[i, j] == "*")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else
+                {
+                    Console.ForegroundColor= ConsoleColor.Cyan;
+                }
                 Console.Write(mapp[i,j]);
             }
 
