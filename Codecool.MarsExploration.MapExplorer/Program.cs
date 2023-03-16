@@ -24,9 +24,9 @@ class Program
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%", "*" };
         int reach = 2;
-        int numberSteps = 300;
-        int minimumMineralsNeeded = _random.Next(1,9);
-        int minimumWaterNeeded = _random.Next(1,9);
+        int numberSteps = 1000;
+        int minimumMineralsNeeded = 9;
+        int minimumWaterNeeded = 9;
         _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0);
         if (_configurationValidator.isValid(_simulation))
         {

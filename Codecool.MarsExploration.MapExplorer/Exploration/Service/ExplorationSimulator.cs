@@ -49,6 +49,7 @@ public class ExplorationSimulator
         Coordinate RoverCurrentCoordinate = _simulationContext.Rover.currentPosition;
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
+        ExplorationOutcome outcome;
         int currentStep = _simulation.currentStep; 
         while (currentStep < _simulationContext.totalNumberSteps)
         {
@@ -59,13 +60,36 @@ public class ExplorationSimulator
             totalResources[1] += currentResources[1];
             
             _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,"");
+            outcome = _explorationSimulationSteps.Analysis(totalResources, minimumResourcesNeeded,currentStep, _simulationContext.totalNumberSteps);
+
+            if (outcome==ExplorationOutcome.Success)
+            {
+                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+                DisplayMap(coordinatesUsed, totalResources);
+                return outcome;
+            }
+            if (outcome==ExplorationOutcome.LackOfResources)
+            {
+                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+                DisplayMap(coordinatesUsed, totalResources);
+                return outcome;
+            }
             currentStep++;
+            
         }
         
-        var outcome = _explorationSimulationSteps.Analysis(totalResources, minimumResourcesNeeded,currentStep, _simulationContext.totalNumberSteps);
+        outcome = ExplorationOutcome.Timeout;
+
         _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
 
 
+
+        DisplayMap(coordinatesUsed, totalResources);
+        return outcome; 
+    }
+
+    private void DisplayMap(List<Coordinate> coordinatesUsed, int[] totalResources)
+    {
         string[,] mapp = new string[32, 32];
         for (var i = 0; i < mapp.GetLength(0); i++)
         {
@@ -82,10 +106,10 @@ public class ExplorationSimulator
                 }
             }
         }
-        
+
         for (var i = 0; i < mapp.GetLength(0); i++)
         {
-            Console.Write($"{i%10}| ");
+            Console.Write($"{i % 10}| ");
             for (var j = 0; j < mapp.GetLength(1); j++)
             {
                 if (mapp[i, j] == "%" || mapp[i, j] == "*")
@@ -94,9 +118,10 @@ public class ExplorationSimulator
                 }
                 else
                 {
-                    Console.ForegroundColor= ConsoleColor.Cyan;
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                 }
-                Console.Write(mapp[i,j]);
+
+                Console.Write(mapp[i, j]);
             }
 
             Console.WriteLine();
@@ -104,9 +129,5 @@ public class ExplorationSimulator
 
         Console.WriteLine(totalResources[0]);
         Console.WriteLine(totalResources[1]);
-        return outcome; 
     }
-    
-    
-    
 }

@@ -84,23 +84,24 @@ public class ExplorationSimulationSteps
 
     public ExplorationOutcome Analysis(int[] foundResources, int[] minimumResourcesNeeded, int currentStep, int totalNumberSteps)
     {
-        int halfTotalSteps = totalNumberSteps / 2;
+        int halfTotalSteps = totalNumberSteps / 4;
+        int halfMinimumMinerals = minimumResourcesNeeded[0] / 2;
+        int halfMinimumWater = minimumResourcesNeeded[1] / 2;
+
         if (foundResources[0] >= minimumResourcesNeeded[0] && foundResources[1] >= minimumResourcesNeeded[1])
         {
             return ExplorationOutcome.Success;
         }
         
-        if (foundResources[0] < minimumResourcesNeeded[0] || foundResources[1] < minimumResourcesNeeded[1])
+        if (foundResources[0] < halfMinimumMinerals && foundResources[1] < halfMinimumWater && currentStep>halfTotalSteps)
         {
             return ExplorationOutcome.LackOfResources;
         }
         
-        if (currentStep < totalNumberSteps)
-        {
-            return ExplorationOutcome.Timeout;
-        }
+        
+        return ExplorationOutcome.Timeout;
+        
 
-        return ExplorationOutcome.Error;
     }
     
 }
