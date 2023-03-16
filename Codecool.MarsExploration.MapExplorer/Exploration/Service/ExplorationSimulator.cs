@@ -116,9 +116,14 @@ public class ExplorationSimulator
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
+
+                else if (mapp[i, j] == "1")
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.ForegroundColor = ConsoleColor.Blue;
                 }
 
                 Console.Write(mapp[i, j]);
