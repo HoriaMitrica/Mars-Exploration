@@ -23,7 +23,7 @@ class Program
         string mapFile = $@"{WorkDir}\Resources\exploration-0.map";
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%", "*" };
-        int reach = 2;
+        int reach = 3;
         int numberSteps = 1000;
         int minimumMineralsNeeded = 9;
         int minimumWaterNeeded = 9;

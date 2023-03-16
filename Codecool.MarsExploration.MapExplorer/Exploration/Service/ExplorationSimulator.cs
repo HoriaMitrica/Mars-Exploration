@@ -98,7 +98,7 @@ public class ExplorationSimulator
                 var currentCoordinate = new Coordinate(i, j);
                 if (coordinatesUsed.Contains(currentCoordinate))
                 {
-                    mapp[i, j] = "1";
+                    mapp[i, j] = "R";
                 }
                 else
                 {
@@ -117,7 +117,7 @@ public class ExplorationSimulator
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
 
-                else if (mapp[i, j] == "1")
+                else if (mapp[i, j] == "R")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
