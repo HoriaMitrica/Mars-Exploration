@@ -61,8 +61,6 @@ public class ExplorationSimulationSteps
             }
         }
         int[] resources = new int[2]{minerals,water};
-        Console.WriteLine(_simulationContext.resources.ToList()[0]);
-        Console.WriteLine(_simulationContext.resources.ToList()[1]);
         return resources;
     }
 

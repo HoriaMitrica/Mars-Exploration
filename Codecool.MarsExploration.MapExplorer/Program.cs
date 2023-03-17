@@ -17,16 +17,15 @@ class Program
     private static IConfigurationValidator _configurationValidator = new ConfigurationValidator();
     private static IRoverDeployer _roverDeployer = new RoverDeployer();
     private static IMapLoader _mapLoader = new MapLoader.MapLoader();
-    private static Random _random = new Random();
     public static void Main(string[] args)
     {
         string mapFile = $@"{WorkDir}\Resources\exploration-0.map";
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%", "*" };
-        int reach = 3;
+        int reach = 2;
         int numberSteps = 1000;
-        int minimumMineralsNeeded = 9;
-        int minimumWaterNeeded = 9;
+        int minimumMineralsNeeded = 8;
+        int minimumWaterNeeded = 8;
         _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0);
         if (_configurationValidator.isValid(_simulation))
         {

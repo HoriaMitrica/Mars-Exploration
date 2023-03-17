@@ -132,7 +132,8 @@ public class ExplorationSimulator
             Console.WriteLine();
         }
 
-        Console.WriteLine(totalResources[0]);
-        Console.WriteLine(totalResources[1]);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine($"Minerals Found(%): {totalResources[0]}");
+        Console.WriteLine($"Pockets of Water Found(*): {totalResources[1]}");
     }
 }
