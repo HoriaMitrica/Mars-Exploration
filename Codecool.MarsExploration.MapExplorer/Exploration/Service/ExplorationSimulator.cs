@@ -8,7 +8,7 @@ using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
 namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
 
-public class ExplorationSimulator
+public class ExplorationSimulator: IExplorationSimulator
 {
     private readonly Simulation _simulation;
 
