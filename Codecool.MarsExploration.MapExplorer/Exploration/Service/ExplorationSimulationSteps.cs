@@ -5,7 +5,7 @@ using Codecool.MarsExploration.MapGenerator.Calculators.Service;
 
 namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
 
-public class ExplorationSimulationSteps
+public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
 {
     private readonly SimulationContext _simulationContext;
     private readonly ICoordinateCalculator _coordinateCalculator;
