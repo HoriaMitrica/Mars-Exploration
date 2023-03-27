@@ -37,6 +37,5 @@ class Program
         {
             _logger.Log("Invalid Simulation");
         }
-        //caca de inceput
     }
 }
