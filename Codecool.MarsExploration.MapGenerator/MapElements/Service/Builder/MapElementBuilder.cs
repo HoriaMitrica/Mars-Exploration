@@ -1,4 +1,5 @@
-﻿using Codecool.MarsExploration.MapGenerator.Calculators.Service;
+﻿using System;
+using Codecool.MarsExploration.MapGenerator.Calculators.Service;
 using Codecool.MarsExploration.MapGenerator.MapElements.Model;
 
 namespace Codecool.MarsExploration.MapGenerator.MapElements.Service.Builder;

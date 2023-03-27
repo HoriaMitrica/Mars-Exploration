@@ -2,7 +2,8 @@
 
 public enum ExplorationOutcome
 {
-    Error,
+    LackOfResources,
     Timeout,
-    Colonizable
+    Success,
+    Error
 }

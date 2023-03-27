@@ -1,4 +1,6 @@
-﻿namespace Codecool.MarsExploration.MapGenerator.Configuration.Model;
+﻿using System.Collections.Generic;
+
+namespace Codecool.MarsExploration.MapGenerator.Configuration.Model;
 
 public record MapElementConfiguration(
     string Symbol,
