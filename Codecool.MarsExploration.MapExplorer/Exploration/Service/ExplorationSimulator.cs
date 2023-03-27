@@ -42,10 +42,9 @@ public class ExplorationSimulator
         return new SimulationContext(numberSteps,numberStepsTimeOut,rover,shipCoordinate,map,resources);
     }
 
-    public ExplorationOutcome? Simulate(int minimumMineralsNeeded, int minimumWaterNeeded)
+    public ExplorationOutcome? Simulate(int minimumMineralsNeeded)
     {
-        int[] totalResources = new int[2]{0,0};
-        int[] minimumResourcesNeeded = new int[2]{minimumMineralsNeeded,minimumWaterNeeded};
+        int totalMinerals = 0;
         Coordinate RoverCurrentCoordinate = _simulationContext.Rover.currentPosition;
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
@@ -56,22 +55,21 @@ public class ExplorationSimulator
             RoverCurrentCoordinate = _explorationSimulationSteps.MoveRover(RoverCurrentCoordinate,coordinatesUsed);
             
             var currentResources = _explorationSimulationSteps.ScanArea(RoverCurrentCoordinate, foundResources);
-            totalResources[0] += currentResources[0];
-            totalResources[1] += currentResources[1];
-            
+            totalMinerals += currentResources;
+
             _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,"");
-            outcome = _explorationSimulationSteps.Analysis(totalResources, minimumResourcesNeeded,currentStep, _simulationContext.totalNumberSteps);
+            outcome = _explorationSimulationSteps.Analysis(totalMinerals, minimumMineralsNeeded,currentStep, _simulationContext.totalNumberSteps);
 
             if (outcome==ExplorationOutcome.Success)
             {
                 _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
-                DisplayMap(coordinatesUsed, totalResources);
+                DisplayMap(coordinatesUsed, totalMinerals);
                 return outcome;
             }
             if (outcome==ExplorationOutcome.LackOfResources)
             {
                 _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
-                DisplayMap(coordinatesUsed, totalResources);
+                DisplayMap(coordinatesUsed, totalMinerals);
                 return outcome;
             }
             currentStep++;
@@ -84,11 +82,11 @@ public class ExplorationSimulator
 
 
 
-        DisplayMap(coordinatesUsed, totalResources);
+        DisplayMap(coordinatesUsed, totalMinerals);
         return outcome; 
     }
 
-    private void DisplayMap(List<Coordinate> coordinatesUsed, int[] totalResources)
+    private void DisplayMap(List<Coordinate> coordinatesUsed, int totalResources)
     {
         string[,] mapp = new string[32, 32];
         for (var i = 0; i < mapp.GetLength(0); i++)
@@ -133,7 +131,6 @@ public class ExplorationSimulator
         }
 
         Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine($"Minerals Found(%): {totalResources[0]}");
-        Console.WriteLine($"Pockets of Water Found(*): {totalResources[1]}");
+        Console.WriteLine($"Minerals Found(%): {totalResources}");
     }
 }
