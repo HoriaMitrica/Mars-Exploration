@@ -30,7 +30,7 @@ public class ExplorationSimulationSteps
         return adjacentCoordinates[random.Next(0, adjacentCoordinates.Count)];
     }
 
-    public int[] ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources)
+    public int ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources)
     {
         
         int minerals = 0;
@@ -49,22 +49,11 @@ public class ExplorationSimulationSteps
                         minerals++;
                         foundResources.Add(coordinate);
                     }
-
-                    if (_simulationContext.Map.Representation[coordinate.X, coordinate.Y] ==
-                        _simulationContext.resources.ToList()[1])
-                    {
-                        water++;
-                        foundResources.Add(coordinate);
-                    }
                 }
-                
             }
         }
-        int[] resources = new int[2]{minerals,water};
-        return resources;
+        return minerals;
     }
-
-    
     
     public void Log(ILogger logger, int currentStep,string RoverID, Coordinate roverCoordinate,string foundOutcome )
     {
@@ -80,26 +69,20 @@ public class ExplorationSimulationSteps
         }
     }
 
-    public ExplorationOutcome Analysis(int[] foundResources, int[] minimumResourcesNeeded, int currentStep, int totalNumberSteps)
+    public ExplorationOutcome Analysis(int foundResources, int minimumResourcesNeeded, int currentStep, int totalNumberSteps)
     {
         int halfTotalSteps = totalNumberSteps / 4;
-        int halfMinimumMinerals = minimumResourcesNeeded[0] / 2;
-        int halfMinimumWater = minimumResourcesNeeded[1] / 2;
+        int halfMinimumMinerals = minimumResourcesNeeded / 2;
 
-        if (foundResources[0] >= minimumResourcesNeeded[0] && foundResources[1] >= minimumResourcesNeeded[1])
+        if (foundResources >= minimumResourcesNeeded )
         {
             return ExplorationOutcome.Success;
         }
         
-        if (foundResources[0] < halfMinimumMinerals && foundResources[1] < halfMinimumWater && currentStep>halfTotalSteps)
+        if (foundResources < halfMinimumMinerals && currentStep>halfTotalSteps)
         {
             return ExplorationOutcome.LackOfResources;
         }
-        
-        
         return ExplorationOutcome.Timeout;
-        
-
     }
-    
 }
