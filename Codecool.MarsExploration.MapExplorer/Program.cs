@@ -4,6 +4,7 @@ using Codecool.MarsExploration.MapExplorer.Configuration.Service;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MapLoader;
+using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
@@ -23,12 +24,13 @@ class Program
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%"};
         int reach = 2;
+        RoverProgramTypes roverProgramType = RoverProgramTypes.Exploring;
         int numberSteps = 1000;
         int minimumMineralsNeeded = 8;
         _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0);
         if (_configurationValidator.isValid(_simulation))
         {
-            ExplorationSimulator explorationSimulator = new ExplorationSimulator(_simulation,_logger,_roverDeployer,_mapLoader, reach);
+            ExplorationSimulator explorationSimulator = new ExplorationSimulator(_simulation,_logger,_roverDeployer,_mapLoader, reach,roverProgramType);
             explorationSimulator.Simulate(minimumMineralsNeeded);  
             Console.WriteLine("The Rover magically teleported back to the spaceship!");
         }

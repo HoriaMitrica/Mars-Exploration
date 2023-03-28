@@ -21,20 +21,20 @@ public class ExplorationSimulator: IExplorationSimulator
     private readonly ExplorationSimulationSteps _explorationSimulationSteps;
 
     private readonly ILogger _logger;
-    public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader, int reach)
+    public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader, int reach,RoverProgramTypes roverProgramType)
     {
         _simulation = simulation;
         _rover = roverDeployer;
         _mapLoader = mapLoader;
-        _simulationContext = CreateContext(reach);
+        _simulationContext = CreateContext(reach,roverProgramType);
         _explorationSimulationSteps = new ExplorationSimulationSteps(_simulationContext);
         _logger = logger;
     }
 
-    private SimulationContext CreateContext(int reach)
+    private SimulationContext CreateContext(int reach,RoverProgramTypes roverProgramType)
     {
         var numberSteps = _simulation.numberOfSteps;
-        var rover = _rover.DeployRover(_simulation,reach);
+        var rover = _rover.DeployRover(_simulation,reach,roverProgramType);
         var shipCoordinate = _simulation.landingCoordinate;
         var map = _mapLoader.Load(_simulation.MapFilePath);
         var resources = _simulation.elementsToScan;
@@ -45,7 +45,7 @@ public class ExplorationSimulator: IExplorationSimulator
     public ExplorationOutcome? Simulate(int minimumMineralsNeeded)
     {
         int totalMinerals = 0;
-        Coordinate RoverCurrentCoordinate = _simulationContext.Rover.currentPosition;
+        Coordinate RoverCurrentCoordinate = _simulationContext.Rover.CurrentPosition;
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
         ExplorationOutcome outcome;

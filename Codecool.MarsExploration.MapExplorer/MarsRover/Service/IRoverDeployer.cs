@@ -5,5 +5,5 @@ namespace Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 
 public interface IRoverDeployer
 {
-    public Rover DeployRover(Simulation simulation, int reach);
+    public Rover DeployRover(Simulation simulation, int reach,RoverProgramTypes roverProgramType);
 }

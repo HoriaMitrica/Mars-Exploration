@@ -35,7 +35,7 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
         
         int minerals = 0;
         int water = 0;
-        for (var i = 1; i <= _simulationContext.Rover.sightReach; i++)
+        for (var i = 1; i <= _simulationContext.Rover.SightReach; i++)
         {
             var adjacentCoordinates =
                 _coordinateCalculator.GetAdjacentCoordinates(roverCoordinate, _simulationContext.Map.Dimension, i).ToList();

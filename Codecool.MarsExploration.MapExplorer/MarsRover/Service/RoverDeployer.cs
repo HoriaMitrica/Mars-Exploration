@@ -17,7 +17,7 @@ public class RoverDeployer: IRoverDeployer
         _coordinateCalculator = new CoordinateCalculator();
         _mapLoader = new MapLoader.MapLoader();
     }
-    public Rover DeployRover(Simulation simulation, int reach)
+    public Rover DeployRover(Simulation simulation, int reach,RoverProgramTypes roverProgramType)
     {
         var coordinateRover = new Coordinate(0,0);
         var ID = "";
@@ -35,6 +35,7 @@ public class RoverDeployer: IRoverDeployer
             }
         }
 
-        return new Rover("rover-1", coordinateRover, reach);
+        return new Rover("rover-1", coordinateRover, reach,roverProgramType);
     }
+    
 }
