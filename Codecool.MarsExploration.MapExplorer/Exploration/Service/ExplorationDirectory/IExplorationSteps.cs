@@ -6,8 +6,8 @@ public interface IExplorationSteps
 {
     public Coordinate MoveRover(Coordinate roverCoordinate, List<Coordinate> coordinatesUsed);
 
-     public int ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources);
+     public void ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources, ref List<Coordinate> SuitableCcCoordinate);
     
-    public ExplorationOutcome Analysis(int foundResources, int minimumResourcesNeeded, int currentStep, int totalNumberSteps);
+    public ExplorationOutcome Analysis(List<Coordinate> suitableCcSpots, int currentStep, int totalNumberSteps);
 
 }

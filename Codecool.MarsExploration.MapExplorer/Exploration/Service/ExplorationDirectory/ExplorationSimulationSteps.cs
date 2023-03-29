@@ -30,11 +30,9 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
         return adjacentCoordinates[random.Next(0, adjacentCoordinates.Count)];
     }
 
-    public int ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources)
+    public void ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources,ref List<Coordinate> SuitableCcCoordinate)
     {
-        
         int minerals = 0;
-        int water = 0;
         for (var i = 1; i <= _simulationContext.Rover.SightReach; i++)
         {
             var adjacentCoordinates =
@@ -52,7 +50,12 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
                 }
             }
         }
-        return minerals;
+
+        if (minerals >= 3)
+        {
+            SuitableCcCoordinate.Add(roverCoordinate);
+        }
+        
     }
     
     public void Log(ILogger logger, int currentStep,string RoverID, Coordinate roverCoordinate,string foundOutcome )
@@ -69,17 +72,14 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
         }
     }
 
-    public ExplorationOutcome Analysis(int foundResources, int minimumResourcesNeeded, int currentStep, int totalNumberSteps)
+    public ExplorationOutcome Analysis(List<Coordinate> suitableCcSpots, int currentStep, int totalNumberSteps)
     {
-        int halfTotalSteps = totalNumberSteps / 4;
-        int halfMinimumMinerals = minimumResourcesNeeded / 2;
-
-        if (foundResources >= minimumResourcesNeeded )
+        if (suitableCcSpots.Count>=2)
         {
             return ExplorationOutcome.Success;
         }
         
-        if (foundResources < halfMinimumMinerals && currentStep>halfTotalSteps)
+        if (suitableCcSpots.Count < 2 && currentStep>totalNumberSteps/2)
         {
             return ExplorationOutcome.LackOfResources;
         }

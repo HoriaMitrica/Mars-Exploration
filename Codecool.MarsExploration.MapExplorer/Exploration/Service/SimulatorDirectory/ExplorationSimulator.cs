@@ -45,30 +45,25 @@ public class ExplorationSimulator: IExplorationSimulator
     public ExplorationOutcome? Simulate(int minimumMineralsNeeded)
     {
         int totalMinerals = 0;
-        Coordinate RoverCurrentCoordinate = _simulationContext.Rover.CurrentPosition;
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
+        List<Coordinate> SuitableCcCoordinates = new List<Coordinate>();
         ExplorationOutcome outcome;
         int currentStep = _simulation.CurrentStep; 
         while (currentStep < _simulationContext.totalNumberSteps)
         {
-            RoverCurrentCoordinate = _explorationSimulationSteps.MoveRover(RoverCurrentCoordinate,coordinatesUsed);
-            
-            var currentResources = _explorationSimulationSteps.ScanArea(RoverCurrentCoordinate, foundResources);
-            totalMinerals += currentResources;
+            outcome = ExplorationOutcomeSteps(coordinatesUsed, currentStep,  ref SuitableCcCoordinates, foundResources);
 
-            _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,"");
-            outcome = _explorationSimulationSteps.Analysis(totalMinerals, minimumMineralsNeeded,currentStep, _simulationContext.totalNumberSteps);
-
-            if (outcome==ExplorationOutcome.Success)
+            if (outcome== ExplorationOutcome.Success)
             {
-                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+                
+                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
                 DisplayMap(coordinatesUsed, totalMinerals);
                 return outcome;
             }
             if (outcome==ExplorationOutcome.LackOfResources)
             {
-                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
                 DisplayMap(coordinatesUsed, totalMinerals);
                 return outcome;
             }
@@ -78,12 +73,27 @@ public class ExplorationSimulator: IExplorationSimulator
         
         outcome = ExplorationOutcome.Timeout;
 
-        _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, RoverCurrentCoordinate,outcome.ToString());
+        _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
 
 
 
         DisplayMap(coordinatesUsed, totalMinerals);
         return outcome; 
+    }
+
+    private ExplorationOutcome ExplorationOutcomeSteps(List<Coordinate> coordinatesUsed,int currentStep,ref List<Coordinate> SuitableCcCoordinates, List<Coordinate> foundResources)
+    {
+        ExplorationOutcome outcome;
+        _simulationContext.Rover.CurrentPosition =
+            _explorationSimulationSteps.MoveRover(_simulationContext.Rover.CurrentPosition, coordinatesUsed);
+
+        _explorationSimulationSteps.ScanArea(_simulationContext.Rover.CurrentPosition, foundResources,
+            ref SuitableCcCoordinates);
+
+        _explorationSimulationSteps.Log(_logger, currentStep, _simulationContext.Rover.ID,
+            _simulationContext.Rover.CurrentPosition, "");
+        outcome = _explorationSimulationSteps.Analysis(SuitableCcCoordinates, currentStep, _simulationContext.totalNumberSteps);
+        return outcome;
     }
 
     private void DisplayMap(List<Coordinate> coordinatesUsed, int totalResources)
