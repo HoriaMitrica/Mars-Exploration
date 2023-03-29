@@ -11,7 +11,7 @@ public class ConstructingSimulationSteps: IConstructingSteps, IStepLogger
     public CommandCenter.Service.CommandCenter ConstructCommandCenter(Simulation simulation,Rover rover)
     {
         var idCc = $"command-center-{++simulation.NumberCommandCenters}";
-        return new CommandCenter.Service.CommandCenter(rover, idCc);
+        return new CommandCenter.Service.CommandCenter(rover, idCc,simulation);
     }
 
     public void Log(ILogger logger, int currentStep, string id, Coordinate stepCoordinate, string? foundOutcome)
