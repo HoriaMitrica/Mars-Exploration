@@ -1,4 +1,5 @@
 ﻿using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
+using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
 namespace Codecool.MarsExploration.MapExplorer.CommandCenter.Service;
 
@@ -6,14 +7,19 @@ public class CommandCenter
 {
     public int SightReach { get; }
 
-    public List<Rover> Rovers = new List<Rover>();
+    public string ID { get; set; }
+    public Coordinate Position { get; set; }
+    public List<Rover> Rovers { get; } = new List<Rover>();
     
     public int ResourcesStored { get; set; }
 
-    public CommandCenter(int sightReach, List<Rover> rovers, int resourcesStored)
+    public CommandCenter(Rover rover,string id)
     {
-        SightReach = sightReach;
-        Rovers = rovers;
-        ResourcesStored = resourcesStored;
+        Position = rover.CurrentPosition;
+        SightReach = rover.SightReach;
+        Rovers.Add(rover);
+        ID = id;
     }
+    
+    
 }

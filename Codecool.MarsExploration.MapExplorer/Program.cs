@@ -27,7 +27,7 @@ class Program
         RoverProgramTypes roverProgramType = RoverProgramTypes.Exploring;
         int numberSteps = 1000;
         int minimumMineralsNeeded = 8;
-        _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0);
+        _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0,0,0);
         if (_configurationValidator.isValid(_simulation))
         {
             ExplorationSimulator explorationSimulator = new ExplorationSimulator(_simulation,_logger,_roverDeployer,_mapLoader, reach,roverProgramType);

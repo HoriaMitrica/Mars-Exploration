@@ -20,11 +20,11 @@ public class RoverDeployer: IRoverDeployer
     public Rover DeployRover(Simulation simulation, int reach,RoverProgramTypes roverProgramType)
     {
         var coordinateRover = new Coordinate(0,0);
-        var ID = "";
+        var id = $"rover-{++simulation.NumberRovers}";
         var map = _mapLoader.Load(simulation.MapFilePath).Representation;
         var mapSize = map.GetLength(0);
         var adjacentCoordinatesSpaceShip =
-            _coordinateCalculator.GetAdjacentCoordinates(simulation.landingCoordinate, mapSize, 1).ToList();
+            _coordinateCalculator.GetAdjacentCoordinates(simulation.LandingCoordinate, mapSize, 1).ToList();
         foreach (var coordinate in adjacentCoordinatesSpaceShip)
         {
             if (map[coordinate.X, coordinate.Y] == " ")
@@ -35,7 +35,7 @@ public class RoverDeployer: IRoverDeployer
             }
         }
 
-        return new Rover("rover-1", coordinateRover, reach,roverProgramType);
+        return new Rover(id, coordinateRover, reach,roverProgramType);
     }
     
 }

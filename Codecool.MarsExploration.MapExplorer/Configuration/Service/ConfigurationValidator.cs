@@ -24,13 +24,9 @@ public class ConfigurationValidator: IConfigurationValidator
     
     public bool isValid(Simulation simulation)
     {
-        if (isPathValid(simulation.MapFilePath) && isLandingSpotValid(simulation.landingCoordinate, simulation.MapFilePath) && areResourcesSpecified(simulation.elementsToScan))
+        if (isPathValid(simulation.MapFilePath) && isLandingSpotValid(simulation.LandingCoordinate, simulation.MapFilePath) && areResourcesSpecified(simulation.ElementsToScan))
         {
             return true;
-            // if (simulation.currentStep < simulation.numberOfSteps)
-            // {
-            //     return true;
-            // }
         }
 
         return false;

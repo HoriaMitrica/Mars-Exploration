@@ -5,5 +5,5 @@ namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
 
 public interface IStepLogger
 {
-    public void Log(ILogger logger, int currentStep, string RoverID, Coordinate roverCoordinate, string foundOutcome);
+    public void Log(ILogger logger, int currentStep, string id, Coordinate stepCoordinate, string? foundOutcome);
 }

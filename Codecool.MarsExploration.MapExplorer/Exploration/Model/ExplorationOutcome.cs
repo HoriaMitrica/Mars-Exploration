@@ -4,6 +4,5 @@ public enum ExplorationOutcome
 {
     LackOfResources,
     Timeout,
-    Success,
-    Error
+    Success
 }

@@ -33,11 +33,11 @@ public class ExplorationSimulator: IExplorationSimulator
 
     private SimulationContext CreateContext(int reach,RoverProgramTypes roverProgramType)
     {
-        var numberSteps = _simulation.numberOfSteps;
+        var numberSteps = _simulation.NumberOfSteps;
         var rover = _rover.DeployRover(_simulation,reach,roverProgramType);
-        var shipCoordinate = _simulation.landingCoordinate;
+        var shipCoordinate = _simulation.LandingCoordinate;
         var map = _mapLoader.Load(_simulation.MapFilePath);
-        var resources = _simulation.elementsToScan;
+        var resources = _simulation.ElementsToScan;
         var numberStepsTimeOut = numberSteps+1;
         return new SimulationContext(numberSteps,numberStepsTimeOut,rover,shipCoordinate,map,resources);
     }
@@ -49,7 +49,7 @@ public class ExplorationSimulator: IExplorationSimulator
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
         ExplorationOutcome outcome;
-        int currentStep = _simulation.currentStep; 
+        int currentStep = _simulation.CurrentStep; 
         while (currentStep < _simulationContext.totalNumberSteps)
         {
             RoverCurrentCoordinate = _explorationSimulationSteps.MoveRover(RoverCurrentCoordinate,coordinatesUsed);
