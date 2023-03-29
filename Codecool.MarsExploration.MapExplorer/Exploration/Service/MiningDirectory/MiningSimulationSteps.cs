@@ -1,40 +1,66 @@
 ﻿using System.Diagnostics;
+using Codecool.MarsExploration.MapExplorer.Exploration.Service.LoggerDirectory;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
 namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.MiningDirectory;
 
-public class MiningSimulationSteps: IMiningSteps, ILogger
+public class MiningSimulationSteps: IMiningSteps
 {
-    public void MoveRoverToResource(Coordinate resourceToMine, Rover currentRover)
+    private readonly ILogger _logger;
+    public void MoveRover(Coordinate resourceToMine, Rover currentRover, ref int currentStep)
     {
-        int step = 0;
         if (resourceToMine.X > currentRover.CurrentPosition.X)
         {
             while (currentRover.CurrentPosition.X != resourceToMine.X)
             {
-                step++;
+                currentStep++;
                 currentRover.CurrentPosition =
                     currentRover.CurrentPosition with { X = currentRover.CurrentPosition.X + 1 };
-                var message = $"STEP: {step}; EVENT MOVING TO MINE; UNIT: {currentRover.ID}, POSITION: [{currentRover.CurrentPosition.X},{currentRover.CurrentPosition.Y}]";
-                Log(message);
+                var message = $"STEP: {currentStep}; EVENT MOVING TO MINE; UNIT: {currentRover.ID}, POSITION: [{currentRover.CurrentPosition.X},{currentRover.CurrentPosition.Y}]";
+                _logger.Log(message);
+            }
+        }else if (resourceToMine.X < currentRover.CurrentPosition.X)
+        {
+            while (currentRover.CurrentPosition.X != resourceToMine.X)
+            {
+                currentStep++;
+                currentRover.CurrentPosition =
+                    currentRover.CurrentPosition with { X = currentRover.CurrentPosition.X - 1 };
+                var message = $"STEP: {currentStep}; EVENT MOVING TO MINE; UNIT: {currentRover.ID}, POSITION: [{currentRover.CurrentPosition.X},{currentRover.CurrentPosition.Y}]";
+                _logger.Log(message);
             }
         }
-    }
 
-    public void MineResource()
-    {
-        throw new NotImplementedException();
+        if (resourceToMine.Y > currentRover.CurrentPosition.Y)
+        {
+            while (currentRover.CurrentPosition.Y != resourceToMine.Y)
+            {
+                currentStep++;
+                currentRover.CurrentPosition =
+                    currentRover.CurrentPosition with { Y = currentRover.CurrentPosition.Y + 1 };
+                var message = $"STEP: {currentStep}; EVENT MOVING TO MINE; UNIT: {currentRover.ID}, POSITION: [{currentRover.CurrentPosition.X},{currentRover.CurrentPosition.Y}]";
+                _logger.Log(message);
+                
+            }
+        }else if (resourceToMine.Y < currentRover.CurrentPosition.Y)
+        {
+            while (currentRover.CurrentPosition.Y != resourceToMine.Y)
+            {
+                currentStep++;
+                currentRover.CurrentPosition =
+                    currentRover.CurrentPosition with { Y = currentRover.CurrentPosition.Y - 1 };
+                var message = $"STEP: {currentStep}; EVENT MOVING TO MINE; UNIT: {currentRover.ID}, POSITION: [{currentRover.CurrentPosition.X},{currentRover.CurrentPosition.Y}]";
+                _logger.Log(message);
+            }
+        }
+        
     }
-
-    public void ReturnRoverToCc(CommandCenter.Service.CommandCenter commandCenter, Rover currentRover)
+    public void MineResource(ref int currentStep)
     {
-        throw new NotImplementedException();
-    }
-
-    public void Log(string message)
-    {
-        throw new NotImplementedException();
+        currentStep+=1;
+        var message = $"Mining Minerals...Loading";
+        _logger.Log(message);
     }
 }

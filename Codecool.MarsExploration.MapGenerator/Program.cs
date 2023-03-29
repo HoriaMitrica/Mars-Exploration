@@ -9,7 +9,7 @@ using Codecool.MarsExploration.MapGenerator.MapElements.Service.Generator;
 using Codecool.MarsExploration.MapGenerator.MapElements.Service.Placer;
 using Codecool.MarsExploration.MapGenerator.Output.Service;
 
-internal class Program
+internal class  Program
 {
     //You can change this to any directory you like
     private static readonly string WorkDir = AppDomain.CurrentDomain.BaseDirectory;

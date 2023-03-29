@@ -5,9 +5,8 @@ namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.MiningDirecto
 
 public interface IMiningSteps
 {
-    public void MoveRoverToResource(Coordinate resourceToMine, Rover currentRover);
+    public void MoveRover(Coordinate resourceToMine, Rover currentRover,ref int currentStep);
 
-    public void MineResource();
+    public void MineResource(ref int currentStep);
 
-    public void ReturnRoverToCc(CommandCenter.Service.CommandCenter commandCenter, Rover currentRover);
 }
