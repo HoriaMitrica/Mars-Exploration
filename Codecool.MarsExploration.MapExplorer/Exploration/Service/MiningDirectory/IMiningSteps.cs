@@ -2,5 +2,5 @@
 
 public interface IMiningSteps
 {
-    
+    // public MoveRover()
 }

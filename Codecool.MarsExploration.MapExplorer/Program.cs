@@ -2,7 +2,6 @@
 using Codecool.MarsExploration.MapExplorer.Configuration;
 using Codecool.MarsExploration.MapExplorer.Configuration.Service;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service;
-using Codecool.MarsExploration.MapExplorer.Exploration.Service.SimulatorDirectory;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MapLoader;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;

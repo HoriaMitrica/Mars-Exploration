@@ -6,7 +6,7 @@ using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
-namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.SimulatorDirectory;
+namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
 
 public class ExplorationSimulator: IExplorationSimulator
 {
