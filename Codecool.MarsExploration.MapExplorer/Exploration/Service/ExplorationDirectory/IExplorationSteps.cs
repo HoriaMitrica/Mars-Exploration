@@ -1,6 +1,6 @@
 ﻿using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
-namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
+namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.ExplorationDirectory;
 
 public interface IExplorationSteps
 {

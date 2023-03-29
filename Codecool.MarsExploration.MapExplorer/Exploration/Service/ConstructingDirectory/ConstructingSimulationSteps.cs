@@ -1,9 +1,10 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+using Codecool.MarsExploration.MapExplorer.Exploration.Service.LoggerDirectory;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
-namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
+namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingDirectory;
 
 public class ConstructingSimulationSteps: IConstructingSteps, IStepLogger
 {
