@@ -8,6 +8,7 @@ namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingD
 
 public class ConstructingSimulationSteps: IConstructingSteps, IStepLogger
 {
+    
     public CommandCenter.Service.CommandCenter ConstructCommandCenter(Simulation simulation,Rover rover)
     {
         var idCc = $"command-center-{++simulation.NumberCommandCenters}";

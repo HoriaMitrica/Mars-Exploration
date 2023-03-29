@@ -1,5 +1,7 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+using Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingDirectory;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.ExplorationDirectory;
+using Codecool.MarsExploration.MapExplorer.Exploration.Service.MiningDirectory;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MapLoader;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
@@ -21,6 +23,12 @@ public class ExplorationSimulator: IExplorationSimulator
     private readonly ExplorationSimulationSteps _explorationSimulationSteps;
 
     private readonly ILogger _logger;
+
+    private readonly IConstructingSteps _constructingSteps;
+
+    private CommandCenter.Service.CommandCenter _commandCenter;
+
+    private readonly IMiningSteps _miningSteps;
     public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader, int reach,RoverProgramTypes roverProgramType)
     {
         _simulation = simulation;
@@ -56,9 +64,11 @@ public class ExplorationSimulator: IExplorationSimulator
 
             if (outcome== ExplorationOutcome.Success)
             {
-                
-                _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
-                DisplayMap(coordinatesUsed, totalMinerals);
+                _commandCenter = _constructingSteps.ConstructCommandCenter(_simulation,_simulationContext.Rover);
+                _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0],RoverProgramTypes.Mining);
+                _commandCenter.ScanForResources(_simulationContext.Map);
+                MiningSteps(currentStep);
+                // _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0]);
                 return outcome;
             }
             if (outcome==ExplorationOutcome.LackOfResources)
@@ -79,6 +89,35 @@ public class ExplorationSimulator: IExplorationSimulator
 
         DisplayMap(coordinatesUsed, totalMinerals);
         return outcome; 
+    }
+
+    private void MiningSteps(int currentStep)
+    {
+        while (_commandCenter.Rovers.Count < 3)
+        {
+            for (var i = 0; i < _commandCenter.Rovers.Count; i++)
+            {
+                _miningSteps.MoveRover(_commandCenter.NearbyResources[i], _commandCenter.Rovers[i], ref currentStep);
+                _miningSteps.MineResource(ref currentStep);
+                _miningSteps.MoveRover(_commandCenter.Position, _commandCenter.Rovers[i], ref currentStep);
+                _commandCenter.ResourcesStored++;
+                if (_commandCenter.ResourcesStored >= 2)
+                {
+                    _commandCenter.BuildRover();
+                }
+            }
+        }
+        while(_commandCenter.ResourcesStored<5){
+            for (var i = 0; i < _commandCenter.Rovers.Count; i++)
+            {
+                _miningSteps.MoveRover(_commandCenter.NearbyResources[i], _commandCenter.Rovers[i], ref currentStep);
+                _miningSteps.MineResource(ref currentStep);
+                _miningSteps.MoveRover(_commandCenter.Position, _commandCenter.Rovers[i], ref currentStep);
+                _commandCenter.ResourcesStored++;
+                
+            }
+        }
+        
     }
 
     private ExplorationOutcome ExplorationOutcomeSteps(List<Coordinate> coordinatesUsed,int currentStep,ref List<Coordinate> SuitableCcCoordinates, List<Coordinate> foundResources)
