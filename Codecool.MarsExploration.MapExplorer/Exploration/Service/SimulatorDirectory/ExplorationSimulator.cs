@@ -1,4 +1,5 @@
-﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+﻿using System.Threading.Channels;
+using Codecool.MarsExploration.MapExplorer.Configuration;
 using Codecool.MarsExploration.MapExplorer.Configuration.Model;
 using Codecool.MarsExploration.MapExplorer.Exploration.Model;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingDirectory;
@@ -54,7 +55,6 @@ public class ExplorationSimulator: IExplorationSimulator
 
     public ExplorationOutcome? Simulate(int minimumMineralsNeeded)
     {
-        int totalMinerals = 0;
         List<Coordinate> coordinatesUsed = new List<Coordinate>();
         List<Coordinate> foundResources = new List<Coordinate>();
         List<Coordinate> SuitableCcCoordinates = new List<Coordinate>();
@@ -67,24 +67,30 @@ public class ExplorationSimulator: IExplorationSimulator
             if (outcome== ExplorationOutcome.Success)
             {
                 _commandCenter = _constructingSteps.ConstructCommandCenter(_simulation,_simulationContext.Rover);
+                
+                var message = $"STEP: {currentStep}; EVENT CONSTRUCTING; UNIT: {_commandCenter.Rovers[0].ID}, POSITION: [{_commandCenter.Rovers[0].CurrentPosition.X},{_commandCenter.Rovers[0].CurrentPosition.Y}]";
+                _logger.Log(message);
                 _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0],RoverProgramTypes.Mining);
                 _commandCenter.ScanForResources(_simulationContext.Map);
+                DisplayMap(SuitableCcCoordinates,_commandCenter.NearbyResources);
+
                 MiningSteps(currentStep);
                 _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0],RoverProgramTypes.Constructing);
                 _commandCenter.Rovers[0].CurrentPosition = SuitableCcCoordinates[1];
                 _constructingSteps.ConstructCommandCenter(_simulation, _commandCenter.Rovers[0]);
                 if (_simulation.NumberCommandCenters == 2 && _simulation.NumberRovers == 3)
                 {
+                    DisplayMap(SuitableCcCoordinates, _commandCenter.NearbyResources);
+                    Console.WriteLine(outcome);
                     return outcome;
                 }
-
+                DisplayMap(SuitableCcCoordinates,_commandCenter.NearbyResources);
                 return ExplorationOutcome.FailedConstruction;
             }
             
             if (outcome==ExplorationOutcome.LackOfResources)
             {
                 _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
-                DisplayMap(coordinatesUsed, totalMinerals);
                 return outcome;
             }
             currentStep++;
@@ -94,10 +100,7 @@ public class ExplorationSimulator: IExplorationSimulator
         outcome = ExplorationOutcome.Timeout;
 
         _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
-
-
-
-        DisplayMap(coordinatesUsed, totalMinerals);
+        DisplayMap(coordinatesUsed, _commandCenter.NearbyResources);
         return outcome; 
     }
 
@@ -105,7 +108,7 @@ public class ExplorationSimulator: IExplorationSimulator
     {
         while (_commandCenter.Rovers.Count < 3)
         {
-            for (var i = 0; i < _commandCenter.Rovers.Count; i++)
+            for (var i = 0; i < _commandCenter.Rovers.Count && _commandCenter.Rovers.Count<3; i++)
             {
                 _miningSteps.MoveRover(_commandCenter.NearbyResources[i], _commandCenter.Rovers[i], ref currentStep);
                 _miningSteps.MineResource(ref currentStep);
@@ -146,7 +149,7 @@ public class ExplorationSimulator: IExplorationSimulator
         return outcome;
     }
 
-    private void DisplayMap(List<Coordinate> coordinatesUsed, int totalResources)
+    private void DisplayMap(List<Coordinate> ccCoordinates,List<Coordinate> resourcesSeen)
     {
         string[,] mapp = new string[32, 32];
         for (var i = 0; i < mapp.GetLength(0); i++)
@@ -154,9 +157,9 @@ public class ExplorationSimulator: IExplorationSimulator
             for (var j = 0; j < mapp.GetLength(1); j++)
             {
                 var currentCoordinate = new Coordinate(i, j);
-                if (coordinatesUsed.Contains(currentCoordinate))
+                if (ccCoordinates.Contains(currentCoordinate))
                 {
-                    mapp[i, j] = "R";
+                    mapp[i, j] = "C";
                 }
                 else
                 {
@@ -170,12 +173,12 @@ public class ExplorationSimulator: IExplorationSimulator
             Console.Write($"{i % 10}| ");
             for (var j = 0; j < mapp.GetLength(1); j++)
             {
-                if (mapp[i, j] == "%" || mapp[i, j] == "*")
+                if (mapp[i, j] == "%" && resourcesSeen.Contains(new Coordinate(i,j)))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
 
-                else if (mapp[i, j] == "R")
+                else if (mapp[i, j] == "C")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
@@ -191,6 +194,5 @@ public class ExplorationSimulator: IExplorationSimulator
         }
 
         Console.ForegroundColor = ConsoleColor.White;
-        Console.WriteLine($"Minerals Found(%): {totalResources}");
     }
 }

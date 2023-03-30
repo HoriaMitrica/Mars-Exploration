@@ -1,4 +1,5 @@
-﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+﻿using System.Threading.Channels;
+using Codecool.MarsExploration.MapExplorer.Configuration;
 using Codecool.MarsExploration.MapExplorer.Configuration.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
@@ -35,19 +36,41 @@ public class CommandCenter
 
     public void ScanForResources(Map map)
     {
-        var currentPosAdjacent = _coordinateCalculator.GetAdjacentCoordinates(Position, map.Dimension,SightReach).ToList();
-        var allCoordinates = _coordinateCalculator.GetAdjacentCoordinates(currentPosAdjacent, map.Dimension).ToList();
-        foreach (var coord in allCoordinates)
+        // for (var i = 1; i <=SightReach; i++)
+        // {
+        //     var currentPosAdjacent = _coordinateCalculator.GetAdjacentCoordinates(Position, map.Dimension, i)
+        //         .ToList();
+        //     var allCoordinates = _coordinateCalculator.GetAdjacentCoordinates(currentPosAdjacent, map.Dimension)
+        //         .ToList();
+        //     foreach (var coord in allCoordinates)
+        //     {
+        //         if (map.Representation[coord.X, coord.Y] == "%")
+        //         {
+        //             NearbyResources.Add(coord);
+        //         }else{map.Representation[coord.X, coord.Y] = "1";}
+        //     }
+        // }
+        List<Coordinate> currentResourcesVisible = new List<Coordinate>();
+        for (var i = 1; i <= SightReach; i++)
         {
-            if (map.Representation[coord.X, coord.Y] == "%")
+            var adjacentCoordinates =
+                _coordinateCalculator.GetAdjacentCoordinates(Position, map.Dimension, i).ToList();
+            var allCoordinates = _coordinateCalculator.GetAdjacentCoordinates(adjacentCoordinates, map.Dimension).ToList();
+
+            foreach (var coordinate in allCoordinates)
             {
-                NearbyResources.Add(coord);           
+                if (!NearbyResources.Contains(coordinate)&& map.Representation[coordinate.X,coordinate.Y]=="%")
+                {
+                    NearbyResources.Add(coordinate);
+                }
             }
         }
+       
+        Console.WriteLine(NearbyResources.Count);
     }
     public void BuildRover()
     {
-        _roverDeployer.DeployRover(Simulation,1,RoverProgramTypes.Mining);
+        Rovers.Add(_roverDeployer.DeployRover(Simulation,1,RoverProgramTypes.Mining));
     }
 
     public void ChangeRoverProgram(Rover rover,RoverProgramTypes roverProgramType)

@@ -7,4 +7,5 @@ namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingD
 public interface IConstructingSteps
 {
     public CommandCenter.Service.CommandCenter ConstructCommandCenter(Simulation simulation,Rover rover);
+    
 }

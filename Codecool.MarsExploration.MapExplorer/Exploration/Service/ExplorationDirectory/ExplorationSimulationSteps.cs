@@ -61,6 +61,10 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
             {
                 foundResources.Add(coord);
             }
+        }
+
+        if (currentResourcesVisible.Count >= 3)
+        {
             SuitableCcCoordinate.Add(roverCoordinate);
         }
         

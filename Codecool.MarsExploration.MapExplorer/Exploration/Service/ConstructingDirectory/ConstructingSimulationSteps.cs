@@ -12,13 +12,14 @@ public class ConstructingSimulationSteps: IConstructingSteps, IStepLogger
     
     public CommandCenter.Service.CommandCenter ConstructCommandCenter(Simulation simulation,Rover rover)
     {
+        
         var idCc = $"command-center-{++simulation.NumberCommandCenters}";
         return new CommandCenter.Service.CommandCenter(rover, idCc,simulation);
     }
 
     public void Log(ILogger logger, int currentStep, string id, Coordinate stepCoordinate, string? foundOutcome)
     {
-        var message = $"STEP: {currentStep}; EVENT Constructing; UNIT: {id}, POSITION: [{stepCoordinate.X},{stepCoordinate.Y}]";
+        var message = $"STEP: {currentStep}; EVENT CONSTRUCTING; UNIT: {id}, POSITION: [{stepCoordinate.X},{stepCoordinate.Y}]";
         logger.Log(message);
     }
 }
