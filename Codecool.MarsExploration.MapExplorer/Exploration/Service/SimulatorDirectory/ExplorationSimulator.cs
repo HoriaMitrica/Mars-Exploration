@@ -1,4 +1,6 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+using Codecool.MarsExploration.MapExplorer.Configuration.Model;
+using Codecool.MarsExploration.MapExplorer.Exploration.Model;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.ConstructingDirectory;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.ExplorationDirectory;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.MiningDirectory;
@@ -8,7 +10,7 @@ using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
-namespace Codecool.MarsExploration.MapExplorer.Exploration.Service;
+namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.SimulatorDirectory;
 
 public class ExplorationSimulator: IExplorationSimulator
 {
@@ -68,9 +70,17 @@ public class ExplorationSimulator: IExplorationSimulator
                 _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0],RoverProgramTypes.Mining);
                 _commandCenter.ScanForResources(_simulationContext.Map);
                 MiningSteps(currentStep);
-                // _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0]);
-                return outcome;
+                _commandCenter.ChangeRoverProgram(_commandCenter.Rovers[0],RoverProgramTypes.Constructing);
+                _commandCenter.Rovers[0].CurrentPosition = SuitableCcCoordinates[1];
+                _constructingSteps.ConstructCommandCenter(_simulation, _commandCenter.Rovers[0]);
+                if (_simulation.NumberCommandCenters == 2 && _simulation.NumberRovers == 3)
+                {
+                    return outcome;
+                }
+
+                return ExplorationOutcome.FailedConstruction;
             }
+            
             if (outcome==ExplorationOutcome.LackOfResources)
             {
                 _explorationSimulationSteps.Log(_logger,currentStep,_simulationContext.Rover.ID, _simulationContext.Rover.CurrentPosition,outcome.ToString());
@@ -104,6 +114,7 @@ public class ExplorationSimulator: IExplorationSimulator
                 if (_commandCenter.ResourcesStored >= 2)
                 {
                     _commandCenter.BuildRover();
+                    _commandCenter.ResourcesStored -= 2;
                 }
             }
         }

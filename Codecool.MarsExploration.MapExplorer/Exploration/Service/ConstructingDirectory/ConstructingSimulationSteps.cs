@@ -1,4 +1,5 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+using Codecool.MarsExploration.MapExplorer.Configuration.Model;
 using Codecool.MarsExploration.MapExplorer.Exploration.Service.LoggerDirectory;
 using Codecool.MarsExploration.MapExplorer.Logger;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;

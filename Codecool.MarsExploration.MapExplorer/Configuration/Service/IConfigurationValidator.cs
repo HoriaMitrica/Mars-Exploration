@@ -1,4 +1,6 @@
-﻿namespace Codecool.MarsExploration.MapExplorer.Configuration.Service;
+﻿using Codecool.MarsExploration.MapExplorer.Configuration.Model;
+
+namespace Codecool.MarsExploration.MapExplorer.Configuration.Service;
 
 public interface IConfigurationValidator
 {

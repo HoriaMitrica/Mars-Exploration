@@ -1,4 +1,5 @@
 ﻿using Codecool.MarsExploration.MapExplorer.Configuration;
+using Codecool.MarsExploration.MapExplorer.Configuration.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Model;
 using Codecool.MarsExploration.MapExplorer.MarsRover.Service;
 using Codecool.MarsExploration.MapGenerator.Calculators.Model;

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Codecool.MarsExploration.MapGenerator.Calculators.Model;
+﻿using Codecool.MarsExploration.MapGenerator.Calculators.Model;
 
-namespace Codecool.MarsExploration.MapExplorer.Configuration;
+namespace Codecool.MarsExploration.MapExplorer.Configuration.Model;
 
 public record Simulation(string MapFilePath,Coordinate LandingCoordinate,IEnumerable<string> ElementsToScan,int NumberOfSteps,int CurrentStep, int NumberRovers, int NumberCommandCenters)
 {
