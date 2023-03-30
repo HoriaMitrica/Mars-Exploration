@@ -2,7 +2,7 @@
 
 namespace Codecool.MarsExploration.MapExplorer.Configuration.Model;
 
-public record Simulation(string MapFilePath,Coordinate LandingCoordinate,IEnumerable<string> ElementsToScan,int NumberOfSteps,int CurrentStep, int NumberRovers, int NumberCommandCenters)
+public record Simulation()
 {
     public string MapFilePath { get; init; }
     
@@ -16,5 +16,15 @@ public record Simulation(string MapFilePath,Coordinate LandingCoordinate,IEnumer
     public int NumberRovers { get; set; }
     
     public int NumberCommandCenters { get; set; }
-    
+
+    public Simulation(string mapFilePath, Coordinate landingCoordinate, IEnumerable<string> elementsToScan, int numberOfSteps, int currentStep, int numberRovers, int numberCommandCenters) : this()
+    {
+        MapFilePath = mapFilePath;
+        LandingCoordinate = landingCoordinate;
+        ElementsToScan = elementsToScan;
+        NumberOfSteps = numberOfSteps;
+        CurrentStep = currentStep;
+        NumberRovers = numberRovers;
+        NumberCommandCenters = numberCommandCenters;
+    }
 };

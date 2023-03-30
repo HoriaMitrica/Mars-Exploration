@@ -8,7 +8,7 @@ namespace Codecool.MarsExploration.MapExplorer.Exploration.Service.MiningDirecto
 
 public class MiningSimulationSteps: IMiningSteps
 {
-    private readonly ILogger _logger;
+    private readonly ILogger _logger = new LoggerConsole();
     public void MoveRover(Coordinate resourceToMine, Rover currentRover, ref int currentStep)
     {
         if (resourceToMine.X > currentRover.CurrentPosition.X)

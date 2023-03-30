@@ -34,11 +34,14 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
     public void ScanArea(Coordinate roverCoordinate, List<Coordinate> foundResources,ref List<Coordinate> SuitableCcCoordinate)
     {
         int minerals = 0;
+        List<Coordinate> currentResourcesVisible = new List<Coordinate>();
         for (var i = 1; i <= _simulationContext.Rover.SightReach; i++)
         {
             var adjacentCoordinates =
                 _coordinateCalculator.GetAdjacentCoordinates(roverCoordinate, _simulationContext.Map.Dimension, i).ToList();
-            foreach (var coordinate in adjacentCoordinates)
+            var allCoordinates = _coordinateCalculator.GetAdjacentCoordinates(adjacentCoordinates, _simulationContext.Map.Dimension).ToList();
+
+            foreach (var coordinate in allCoordinates)
             {
                 if (!foundResources.Contains(coordinate))
                 {
@@ -46,7 +49,7 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
                         _simulationContext.resources.ToList()[0])
                     {
                         minerals++;
-                        foundResources.Add(coordinate);
+                        currentResourcesVisible.Add(coordinate);
                     }
                 }
             }
@@ -54,6 +57,10 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
 
         if (minerals >= 3)
         {
+            foreach (var coord in currentResourcesVisible)
+            {
+                foundResources.Add(coord);
+            }
             SuitableCcCoordinate.Add(roverCoordinate);
         }
         
@@ -75,6 +82,7 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
 
     public ExplorationOutcome Analysis(List<Coordinate> suitableCcSpots, int currentStep, int totalNumberSteps)
     {
+        Console.WriteLine(String.Join("\n",suitableCcSpots));
         if (suitableCcSpots.Count>=2)
         {
             return ExplorationOutcome.Success;

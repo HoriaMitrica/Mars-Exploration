@@ -22,10 +22,10 @@ class Program
     private static IMapLoader _mapLoader = new MapLoader.MapLoader();
     public static void Main(string[] args)
     {
-        string mapFile = $@"{WorkDir}\Resources\exploration-0.map";
+        string mapFile = $@"{WorkDir}\Resources\exploration-2.map";
         Coordinate landingSpot = new Coordinate(6, 6);
         List<string> elementsToScan = new List<string>() { "%"};
-        int reach = 2;
+        int reach = 5;
         RoverProgramTypes roverProgramType = RoverProgramTypes.Exploring;
         int numberSteps = 1000;
         int minimumMineralsNeeded = 8;

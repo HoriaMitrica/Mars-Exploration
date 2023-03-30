@@ -26,11 +26,11 @@ public class ExplorationSimulator: IExplorationSimulator
 
     private readonly ILogger _logger;
 
-    private readonly IConstructingSteps _constructingSteps;
+    private readonly IConstructingSteps _constructingSteps = new ConstructingSimulationSteps();
 
     private CommandCenter.Service.CommandCenter _commandCenter;
 
-    private readonly IMiningSteps _miningSteps;
+    private readonly IMiningSteps _miningSteps = new MiningSimulationSteps();
     public ExplorationSimulator(Simulation simulation, ILogger logger,IRoverDeployer roverDeployer,IMapLoader mapLoader, int reach,RoverProgramTypes roverProgramType)
     {
         _simulation = simulation;

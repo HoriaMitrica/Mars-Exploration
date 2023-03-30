@@ -11,7 +11,7 @@ namespace Codecool.MarsExploration.MapExplorer.CommandCenter.Service;
 
 public class CommandCenter 
 {
-    private readonly ICoordinateCalculator _coordinateCalculator;
+    private readonly ICoordinateCalculator _coordinateCalculator = new CoordinateCalculator();
 
     private readonly IRoverDeployer _roverDeployer = new RoverDeployer();
     public int SightReach { get; }

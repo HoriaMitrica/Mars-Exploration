@@ -25,7 +25,7 @@ public class ConfigurationValidator: IConfigurationValidator
     
     public bool isValid(Simulation simulation)
     {
-        if (isPathValid(simulation.MapFilePath) && isLandingSpotValid(simulation.LandingCoordinate, simulation.MapFilePath) && areResourcesSpecified(simulation.ElementsToScan))
+        if (isPathValid(simulation) && isLandingSpotValid(simulation.LandingCoordinate, simulation.MapFilePath) && areResourcesSpecified(simulation.ElementsToScan))
         {
             return true;
         }
@@ -33,8 +33,9 @@ public class ConfigurationValidator: IConfigurationValidator
         return false;
     }
 
-    private bool isPathValid(string filePath)
+    private bool isPathValid(Simulation simulatio)
     {
+        var filePath = simulatio.MapFilePath;
         if (filePath.Length != 0)
         {
             var text = File.ReadAllText(filePath);

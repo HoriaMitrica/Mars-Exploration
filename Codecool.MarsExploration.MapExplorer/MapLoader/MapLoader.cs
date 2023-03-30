@@ -16,7 +16,7 @@ public class MapLoader: IMapLoader
             var row = map[i];
             for (var j = 0; j < map.Count; j++)
             {
-                representationArray[i, j] = row[j].ToString();
+                representationArray[i,j] = row[j].ToString();
             }
         }
 
