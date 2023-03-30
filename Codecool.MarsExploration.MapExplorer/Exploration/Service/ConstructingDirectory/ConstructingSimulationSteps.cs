@@ -12,7 +12,7 @@ public class ConstructingSimulationSteps: IConstructingSteps, IStepLogger
     
     public CommandCenter.Service.CommandCenter ConstructCommandCenter(Simulation simulation,Rover rover)
     {
-        
+        Console.WriteLine("COMMAND CENTER IS BEING BUILD...LOADING");
         var idCc = $"command-center-{++simulation.NumberCommandCenters}";
         return new CommandCenter.Service.CommandCenter(rover, idCc,simulation);
     }

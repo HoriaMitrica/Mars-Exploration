@@ -36,21 +36,6 @@ public class CommandCenter
 
     public void ScanForResources(Map map)
     {
-        // for (var i = 1; i <=SightReach; i++)
-        // {
-        //     var currentPosAdjacent = _coordinateCalculator.GetAdjacentCoordinates(Position, map.Dimension, i)
-        //         .ToList();
-        //     var allCoordinates = _coordinateCalculator.GetAdjacentCoordinates(currentPosAdjacent, map.Dimension)
-        //         .ToList();
-        //     foreach (var coord in allCoordinates)
-        //     {
-        //         if (map.Representation[coord.X, coord.Y] == "%")
-        //         {
-        //             NearbyResources.Add(coord);
-        //         }else{map.Representation[coord.X, coord.Y] = "1";}
-        //     }
-        // }
-        List<Coordinate> currentResourcesVisible = new List<Coordinate>();
         for (var i = 1; i <= SightReach; i++)
         {
             var adjacentCoordinates =
@@ -70,6 +55,7 @@ public class CommandCenter
     }
     public void BuildRover()
     {
+        Console.WriteLine("COMMAND CENTER is Building Rover...LOADING");
         Rovers.Add(_roverDeployer.DeployRover(Simulation,1,RoverProgramTypes.Mining));
     }
 

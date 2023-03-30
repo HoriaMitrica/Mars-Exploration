@@ -60,7 +60,7 @@ public class MiningSimulationSteps: IMiningSteps
     public void MineResource(ref int currentStep)
     {
         currentStep+=1;
-        var message = $"Mining Minerals...Loading";
+        var message = $"ROVER is Mining Minerals...LOADING";
         _logger.Log(message);
     }
 }

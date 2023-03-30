@@ -43,7 +43,7 @@ public class ExplorationSimulationSteps: IExplorationSteps, IStepLogger
 
             foreach (var coordinate in allCoordinates)
             {
-                if (!foundResources.Contains(coordinate))
+                if (!foundResources.Contains(coordinate) && !currentResourcesVisible.Contains(coordinate))
                 {
                     if (_simulationContext.Map.Representation[coordinate.X, coordinate.Y] ==
                         _simulationContext.resources.ToList()[0])

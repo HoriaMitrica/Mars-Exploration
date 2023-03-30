@@ -27,7 +27,7 @@ class Program
         List<string> elementsToScan = new List<string>() { "%"};
         int reach = 3;
         RoverProgramTypes roverProgramType = RoverProgramTypes.Exploring;
-        int numberSteps = 500;
+        int numberSteps = 1000;
         int minimumMineralsNeeded = 8;
         _simulation = new Simulation(mapFile, landingSpot, elementsToScan, numberSteps, 0,0,0);
         if (_configurationValidator.isValid(_simulation))
